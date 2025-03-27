@@ -2,16 +2,20 @@
   <div :id="containerId">
     <p>{{ course.name }}</p>
     <table>
-      <tr>
-        <th>Country</th>
-        <th>Player</th>
-        <th>Time</th>
-      </tr>
-      <tr @click="onPlayerClicked(player)" v-for="player in course.players">
-        <td align="center"><img width="20" :src="`https://www.mkleaderboards.com/images/flags/${player.country}.png`" /></td>
-        <td>{{ player.name }}</td>
-        <td>{{ player.finalTime }}</td>
-      </tr>
+      <thead>
+        <tr>
+          <th>Country</th>
+          <th>Player</th>
+          <th>Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr @click="onPlayerClicked(player)" v-for="player in course.players">
+          <td align="center"><img width="20" :src="`https://www.mkleaderboards.com/images/flags/${player.country}.png`" /></td>
+          <td>{{ player.name }}</td>
+          <td>{{ player.finalTime }}</td>
+        </tr>
+      </tbody>
     </table>
   </div>
 </template>
