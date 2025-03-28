@@ -1,5 +1,5 @@
 <template>
-  <div id="course-container" align="center">
+  <div id="course-container" class=" bg-amber-300">
     <CourseView @playerSelected="onPlayerSelected" v-for="course in courseData" :course="course" />
     <PlayerDetails v-if="currentPlayer" :player="currentPlayer" />
   </div>
