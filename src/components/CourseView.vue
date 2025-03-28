@@ -1,5 +1,5 @@
 <template>
-  <div :id="containerId">
+  <div class=" h-fit border-blue-300 bg-lime-200 px-4 py-2 rounded-md border-4">
     <p>{{ course.name }}</p>
     <table>
       <thead>
@@ -61,10 +61,6 @@ const emit = defineEmits([
 
 const flagImg = computed(() => {
   return `https://www.mkleaderboards.com/images/flags/${course.players.country}.png`
-})
-
-const containerId = computed(() => {
-  return `course-view-${props.course.id}`
 })
 
 function onPlayerClicked(player) {

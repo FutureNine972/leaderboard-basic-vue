@@ -12,19 +12,42 @@ These are the top three times on two tracks in Mario Kart 8 Deluxe (full leaderb
 This was completed using:
 
 * Vue
+* Tailwind CSS
 * JavaScript
 * HTML
 
-My HTML repo includes a simple CSS style unlike this Vue repo at the moment, but this commit is intended to show my progress specifically on learning how to use VueJS.
+Since my last ReadMe update, I've come around to:
+
+* Vue
+* Flexbox & Grid
+* Neater Styling
+* Support for Horizontally Crammed Windows (Sort Of)
+* Fixing my terrible habit of not putting a table head or body.
+
+![(Preview)](images/preview2.png)
 
 If you wish to run and test this, just download the repo, cd into basic_vue, run `npm install` and `npm run dev`, and go to your localhost:xxxx
 
-###### Vue Example
+###### Vue/Tailwind - Player Details
 
 ```html
-<tr @click="onPlayerClicked(player)" v-for="player in course.players">
-    <td><img width="20" :src="`https://www.mkleaderboards.com/images/flags/${player.country}.png`"/></td>
-    <td>{{ player.name }}</td>
-    <td>{{ player.finalTime }}</td>
-</tr>
+<div class=" border-blue-300 bg-lime-200 px-4 py-2 rounded-md border-4">
+    <p>Run Details</p>
+    <table>
+        <thead>
+            <tr>
+                <th><img width="20" :src="`https://www.mkleaderboards.com/images/flags/${player.country}.png`" />
+                </th>
+                <th>{{ player.name }}</th>
+                <th>{{ player.finalTime }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="lap in player.lapTimes">
+                <td colspan="2" align="center">Lap {{ lap.order }}</td>
+                <td colspan="1">{{ lap.time }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 ```
