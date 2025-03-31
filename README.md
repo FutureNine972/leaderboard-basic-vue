@@ -2,7 +2,7 @@ My Intro to Vue
 ======
 
 ### Introduction
-This is a repo used to display my progress on learning web dev.
+This is one of the many repos used to display my progress on web dev, as well as the frontend for my basic leaderboard learning project.
 
 ![(Preview)](images/preview.png)
 
@@ -12,42 +12,33 @@ These are the top three times on two tracks in Mario Kart 8 Deluxe (full leaderb
 This was completed using:
 
 * Vue
-* Tailwind CSS
 * JavaScript
+* Tailwind CSS
 * HTML
 
-Since my last ReadMe update, I've come around to:
+Updates:
 
-* Vue
-* Flexbox & Grid
-* Neater Styling
-* Support for Horizontally Crammed Windows (Sort Of)
-* Fixing my terrible habit of not putting a table head or body.
+* Axios GET Request
+* A button that resends that request and changes the color of the "Courses Loaded" text to confirm status 200.
 
-![(Preview)](images/preview2.png)
+This will not function correctly alone; don't forget about the [backend](https://github.com/FutureNine972/leaderboard-basic-flask) repo. Stick them both in one parent folder and then complete the necessary tasks for the backend virtual environment and frontend npm startup.
 
-If you wish to run and test this, just download the repo, cd into basic_vue, run `npm install` and `npm run dev`, and go to your localhost:xxxx
+###### JavaScript - Axios GET Request
 
-###### Vue/Tailwind - Player Details
+```js
+onMounted(async () => {
+  await load()
+})
 
-```html
-<div class=" border-blue-300 bg-lime-200 px-4 py-2 rounded-md border-4">
-    <p>Run Details</p>
-    <table>
-        <thead>
-            <tr>
-                <th><img width="20" :src="`https://www.mkleaderboards.com/images/flags/${player.country}.png`" />
-                </th>
-                <th>{{ player.name }}</th>
-                <th>{{ player.finalTime }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="lap in player.lapTimes">
-                <td colspan="2" align="center">Lap {{ lap.order }}</td>
-                <td colspan="1">{{ lap.time }}</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+async function load() {
+  const { data, status } = await axios.get(
+    "http://localhost:5174/courses"
+  )
+  if (status == 200) {
+    courseData.value = data
+    loadNewColor() // Changes the color of the "Courses Loaded" text element, just to show the button and request both work.
+  } else {
+    console.error("Failed to load data")
+  }
+}
 ```

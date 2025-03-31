@@ -11,7 +11,7 @@
       </thead>
       <tbody>
         <tr @click="onPlayerClicked(player)" v-for="player in course.players">
-          <td align="center"><img width="20" :src="`https://www.mkleaderboards.com/images/flags/${player.country}.png`" /></td>
+          <td class='m-10' align="center"><img width="20" :src="`https://www.mkleaderboards.com/images/flags/${player.country}.png`" /></td>
           <td>{{ player.name }}</td>
           <td>{{ player.finalTime }}</td>
         </tr>
