@@ -1,6 +1,11 @@
 <template>
-  <div class=" h-fit border-blue-300 bg-lime-200 px-4 py-2 rounded-md border-4">
-    <p>{{ course.name }}</p>
+  <div class=" h-fit border-blue-300 bg-transparent px-4 py-2 rounded-md border-4">
+    <div class="flex grid-cols-2 gap-35">
+      <p>{{ course.name }}</p>
+      <div class=" bg-blue-700 hover:bg-blue-500 text-white font-bold px-10 rounded">
+        <button @click="onEditClicked" class=""><Pencil-Icon class="size-6 text-yellow-300" /></button>
+      </div>
+    </div>
     <table>
       <thead>
         <tr>
@@ -48,6 +53,7 @@ h3 {
 
 <script setup>
 import { computed } from 'vue'
+import { PencilIcon } from '@heroicons/vue/24/solid'
 const props = defineProps({
   course: {
     type: Object,
@@ -56,12 +62,17 @@ const props = defineProps({
 })
 
 const emit = defineEmits([
-    "playerSelected"
+    "playerSelected",
+    "onEditModeActivate"
   ])
 
 const flagImg = computed(() => {
   return `https://www.mkleaderboards.com/images/flags/${course.players.country}.png`
 })
+
+function onEditClicked() {
+  emit("onEditModeActivate", props.course.id)
+}
 
 function onPlayerClicked(player) {
   emit("playerSelected", player)
