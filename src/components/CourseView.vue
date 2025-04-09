@@ -1,10 +1,12 @@
 <template>
-  <div class=" h-fit border-blue-300 bg-transparent px-4 py-2 rounded-md border-4">
-    <div class="flex grid-cols-2 gap-35">
-      <p>{{ course.name }}</p>
-      <div class=" bg-blue-700 hover:bg-blue-500 text-white font-bold px-10 rounded">
-        <button @click="onEditClicked" class=""><Pencil-Icon class="size-6 text-yellow-300" /></button>
-      </div>
+  <div class=" flex flex-col h-fit border-blue-300 bg-gray-700 px-4 py-2 gap-y-4 rounded-md border-4">
+    <div class="flex w-full items-center gap-x-4">
+      <span class="flex grow">{{ course.name }}</span>
+      <button @click="onEditClicked"
+        class=" p-1.5 bg-blue-700 hover:bg-blue-500 hover:cursor-pointer rounded-sm"><Pencil-Icon class="h-6 w-6 text-yellow-300" /></button>
+      <button @click="onDeleteClicked"
+        class=" p-1.5 bg-red-700 hover:bg-red-500 hover:cursor-pointer rounded-sm"><Trash-Icon
+          class="h-6 w-6 text-yellow-300" /></button>
     </div>
     <table>
       <thead>
@@ -16,9 +18,10 @@
       </thead>
       <tbody>
         <tr @click="onPlayerClicked(player)" v-for="player in course.players">
-          <td class='m-10' align="center"><img width="20" :src="`https://www.mkleaderboards.com/images/flags/${player.country}.png`" /></td>
-          <td>{{ player.name }}</td>
-          <td>{{ player.finalTime }}</td>
+          <td align="center"><img width="20"
+              :src="`https://www.mkleaderboards.com/images/flags/${player.country}.png`" /></td>
+          <td align="center" class=' px-5 py-0.5'>{{ player.name }}</td>
+          <td align="center">{{ player.finalTime }}</td>
         </tr>
       </tbody>
     </table>
@@ -52,8 +55,8 @@ h3 {
 </style>
 
 <script setup>
-import { computed } from 'vue'
-import { PencilIcon } from '@heroicons/vue/24/solid'
+import { PencilIcon, TrashIcon } from '@heroicons/vue/24/solid'
+import { inject } from 'vue'
 const props = defineProps({
   course: {
     type: Object,
@@ -61,14 +64,12 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits([
-    "playerSelected",
-    "onEditModeActivate"
-  ])
+const courseStore = inject("course_store")
 
-const flagImg = computed(() => {
-  return `https://www.mkleaderboards.com/images/flags/${course.players.country}.png`
-})
+const emit = defineEmits([
+  "playerSelected",
+  "onEditModeActivate"
+])
 
 function onEditClicked() {
   emit("onEditModeActivate", props.course.id)
@@ -76,5 +77,9 @@ function onEditClicked() {
 
 function onPlayerClicked(player) {
   emit("playerSelected", player)
+}
+
+async function onDeleteClicked() {
+  await courseStore.remove(props.course.id)
 }
 </script>

@@ -11,43 +11,42 @@
     <div class="w-1/3 bg-gray-600 text-white p-10">
       <!-- Default -->
       <div v-if="mode === 'default'">
-        <div class="flex flex-col gap-y-3 bg-blue-700 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded">
-          <button @click="load" class="px-40"><Arrow-PathIcon class="size-6 text-yellow-300" /></button>
+        <div class="flex flex-col gap-y-3 bg-blue-700 hover:bg-blue-500 text-white font-bold rounded">
+          <button @click="load" class=" py-2 px-4 h-full w-full snap-center hover:cursor-pointer"><Arrow-PathIcon class="size-6 text-yellow-300" /></button>
         </div>
         <div class="p-5">
           <PlayerDetails v-if="currentPlayer" :player="currentPlayer" />
         </div>
+        <button class="py-2 bg-blue-700 hover:bg-blue-500 text-white font-bold rounded hover:cursor-pointer w-full" @click="showCourseMenu">Add Course</button>
         <div class="size-16 px-1 py-1.5" :class="currentColor">
           <h2>Courses Loaded</h2>
         </div>
-        <button class="py-2 bg-blue-700 hover:bg-blue-500 text-white font-bold rounded hover:cursor-pointer w-full" @click="showCourseMenu">Add Course</button>
       </div>
 
       <!-- Add -->
       <div v-if="mode === 'add'">
         <AddCourseView
-        @onCancelClick="mode='default'"
+        @returnToMainMenu="mode='default'"
         />
       </div>
 
       <!-- Edit -->
       <div v-if="mode === 'edit'">
-        <div class="flex flex-col gap-y-3 bg-blue-700 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded">
-          <button @click="mode='default'">Cancel</button>
-        </div>
-        <p>{{ editId }}</p>
+        <EditCourseView @returnToMainMenu="mode='default'":courseId="editId"/>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import axios from 'axios'
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, inject} from 'vue'
 import CourseView from './components/CourseView.vue'
 import PlayerDetails from './components/PlayerDetails.vue'
 import AddCourseView from './components/AddCourseView.vue'
+import EditCourseView from './components/EditCourseView.vue'
 import { ArrowPathIcon } from '@heroicons/vue/24/solid'
+
+const courseStore = inject("course_store")
 
 const colors = [
   'text-red-400',
@@ -60,7 +59,7 @@ const colors = [
 
 const currentPlayer = ref(null)
 
-const courseData = ref([])
+const courseData = computed(() => courseStore.courses)
 
 const editId = ref(null)
 
@@ -89,15 +88,9 @@ onMounted(async () => {
 })
 
 async function load() {
-  const { data, status } = await axios.get(
-    "http://localhost:5174/courses"
-  )
-  if (status == 200) {
-    courseData.value = data
-    loadNewColor()
-  } else {
-    console.error("Failed to load data")
-  }
+  await courseStore.load()
+  
+  loadNewColor()
 }
 
 </script>

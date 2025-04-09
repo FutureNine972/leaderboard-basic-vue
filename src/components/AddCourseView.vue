@@ -7,34 +7,30 @@
             <span>Lap Count</span>
             <input v-model="newCourse.lapCount" placeholder="Lap Count" class=" placeholder-blue-200" />
         </div>
-        <div class="flex gap-x-30 w-full justify-center">
-            <button @click="onAddClick">Add</button>
-            <button @click="emit('onCancelClick')">Cancel</button>
+        <div class="flex py-5 gap-x-10 rounded">
+            <button @click="onAddClick" class="bg-blue-700 hover:bg-blue-500 text-white font-bold w-full h-full">Add</button>
+            <button @click="emit('returnToMainMenu')" class="bg-red-700 hover:bg-red-500 text-white font-bold w-full h-full ml-2">Cancel</button>
         </div>
     </div>
 </template>
 
 <script setup>
 
-import { ref } from 'vue'
-import axios from 'axios'
-
-const emit = defineEmits([
-    "onCancelClick"
-])
+import { ref, inject } from 'vue'
 
 const newCourse = ref({})
 
+const courseStore = inject("course_store")
+
+const emit = defineEmits([
+    "returnToMainMenu"
+])
+
 async function onAddClick() {
-    const response = await axios.post(
-        "http://localhost:5174/courses",
-        newCourse.value
-    )
-    console.log(response)
-    if (response.status == 201) {
-        alert(`${newCourse.value.name} has been successfully created with ${newCourse.value.lapCount} laps!`)
-    } else {
-        console.error("Failed to add course")
+    const createdCourse = await courseStore.add(newCourse.value)
+    emit('returnToMainMenu')
+    if (createdCourse !== null) {
+        // alert(`${createdCourse.name} has been successfully created with ID: ${createdCourse.id}`)
     }
 }
 
